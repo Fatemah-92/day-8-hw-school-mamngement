@@ -6,9 +6,7 @@ export const addClassroom = async(req: Request, res: Response)=> {
     const {name, teacherId, studentId } = req.body;
     const classroom = await prisma.classroom.create({
         data: {
-            name,
-            teacherId,
-            studentId 
+            name
         },
         select: {
             name: true,
@@ -31,19 +29,16 @@ export const addClassroom = async(req: Request, res: Response)=> {
 export const getClassrooms = async(req: Request, res: Response)=> {
     const classrooms = await prisma.classroom.findMany({
         select: {
+            // id: true,
             name: true,
+            student: {
+                select: {
+                    name: true
+                }
+            },
             teacher: {
                 select: {
-                    name: true,
-                    classroom: {
-                        select: {
-                            student: {
-                                select: {
-                                    name: true
-                                }
-                            }
-                        }
-                    }
+                    name: true
                 } 
             }
         }
@@ -65,14 +60,14 @@ export const getClassroomById = async(req: Request, res: Response)=> {
         },
         select: {
             name: true,
+            student: {
+                select: {
+                    name: true
+                }
+            },
             teacher: {
                 select: {
-                    name: true,
-                    classroom: {
-                        select: {
-                            student: true
-                        }
-                    }
+                    name: true
                 } 
             }
         }

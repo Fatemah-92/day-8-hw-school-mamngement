@@ -3,21 +3,10 @@ import {Request, Response } from "express";
 
 // 1. Add Student
 export const addStudent = async(req: Request, res: Response)=> {
-    const {name, age, major} = req.body;
     const student = await prisma.student.create({
-        data: {
-            name,
-            age,
-            major
-        }, select: {
-            name: true,
-            age: true,
-            major: true,
-            classrooms: {
-                select: {
-                    name: true
-                }
-            }
+        data: req.body
+        , select: {
+            classroom: true
         }
     })
     res.json({"message": "Student Created !", "Student": student})
@@ -27,15 +16,11 @@ export const addStudent = async(req: Request, res: Response)=> {
 export const getStudents = async(req: Request, res: Response)=> {
     const students = await prisma.student.findMany({
         select: {
-            id: true,
+            // id: true,
             name: true,
             age: true,
             major: true,
-            classrooms: {
-                select: {
-                    name: true
-                }
-            }
+            classroom: true
         }
     })
     try {
@@ -54,14 +39,11 @@ export const getStudentById = async(req: Request, res: Response)=> {
             id: req.params.id
         },
         select: {
+            id: true,
             name: true,
             age: true,
             major: true,
-            classrooms: {
-                select: {
-                    name: true
-                }
-            }
+            classroom: true
         }
     })
     try {

@@ -3,11 +3,8 @@ import {Request, Response } from "express";
 
 // 1. Add Teacher
 export const addTeacher = async(req: Request, res: Response)=> {
-    const {name} = req.body;
     const teacher = await prisma.teacher.create({
-        data: {
-            name
-        },
+        data: req.body,
         select: {
             name: true,
             classroom: {
@@ -24,7 +21,7 @@ export const addTeacher = async(req: Request, res: Response)=> {
 export const getTeachers = async(req: Request, res: Response)=> {
     const teachers = await prisma.teacher.findMany({
         select: {
-            id: true,
+            // id: true,
             name: true,
             classroom: {
                 select: {

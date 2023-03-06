@@ -12,23 +12,20 @@ model Student {
   name       String
   age        Int
   major      String
-  classrooms Classroom[]
-}
-
-model Classroom {
-  id        String  @id @default(uuid())
-  name      String
-  teacherId String
-  studentId String
-  student   Student @relation(fields: [studentId], references: [id])
-  teacher   Teacher @relation(fields: [teacherId], references: [id])
-
-  @@index([studentId], map: "Classroom_studentId_fkey")
-  @@index([teacherId], map: "Classroom_teacherId_fkey")
+  classroomId String
+  classroom   Classroom? @relation(fields: [classroomId], references: [id])
 }
 
 model Teacher {
   id        String      @id @default(uuid())
   name      String
-  classroom Classroom[]
+  classroomId String
+  classroom   Classroom? @relation(fields: [classroomId], references: [id])
+}
+
+model Classroom {
+  id        String  @id @default(uuid())
+  name      String
+  student Student[]
+  teacher Teacher[]
 }
