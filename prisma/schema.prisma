@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id         String      @id @default(uuid())
+  name       String
+  age        Int
+  major      String
+  classrooms Classroom[]
+}
+
+model Classroom {
+  id        String  @id @default(uuid())
+  name      String
+  teacherId String
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+
+  @@index([studentId], map: "Classroom_studentId_fkey")
+  @@index([teacherId], map: "Classroom_teacherId_fkey")
+}
+
+model Teacher {
+  id        String      @id @default(uuid())
+  name      String
+  classroom Classroom[]
+}
